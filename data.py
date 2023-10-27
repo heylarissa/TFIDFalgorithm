@@ -1,5 +1,6 @@
 import pandas as pd
 from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
 
 def read_csv_file(file: str):
     """ Opens csv file in write mode and returns the dataset """
@@ -42,8 +43,14 @@ def data_preprocessing(dataset, string_column: str):
     for document in documents:
         doc = remove_special_characteres(document.lower())
         doc = remove_stop_words(doc, stop_words)
-        cleaned_documents.append(doc)
+        
         # stemming
+        filtered_tokens = document.split(" ")
+        # stemmer = PorterStemmer()
+        # stemmed_tokens = [stemmer.stem(word) for word in filtered_tokens]
+        # for token in stemmed_tokens:
+        #     doc = f"{doc} {token}"
+        cleaned_documents.append(doc)
         # tf-idf (codificação de rótulos de classe)
 
     return cleaned_documents
