@@ -1,5 +1,10 @@
 import pandas as pd
 from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+import nltk
+
+nltk.download('stopwords')
+nltk.download('punkt')
 
 """
 Etapas para classificação do texto utilizando o algoritmo TF-IDF
@@ -58,10 +63,22 @@ file.close()
 # import required module
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
+from nltk.tokenize import word_tokenize
+
+# Tokenização
+tokens = word_tokenize(text)
+
+
+filtered_tokens = [word for word in tokens if word.lower() not in stop_words]
+
+# Stemming
+stemmer = PorterStemmer()
+stemmed_tokens = [stemmer.stem(word) for word in filtered_tokens]
+
 
 # create object
 tfidf = TfidfVectorizer()
- 
+
 # get tf-df values
 result = tfidf.fit_transform(data)
 print(result)
