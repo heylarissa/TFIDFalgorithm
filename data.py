@@ -19,7 +19,7 @@ def remove_special_characteres(text: str):
 
 def remove_stop_words(text: str, stop_words):
     """ Remove stop words from the string """
-    stemmer = SnowballStemmer('portuguese')    
+
     doc = ""
     words = text.split(" ")
     for word in words:

@@ -10,26 +10,41 @@ def run():
     dataset = read_csv_file("g1_v1.csv")
     documents = data_preprocessing(dataset=dataset, string_column="texto")
 
-    # Divida os dados em conjuntos de treinamento e teste
-    X_train, X_test, y_train, y_test = train_test_split(documents, dataset["classe"], test_size=0.2, random_state=42)
-    
+    X_train, X_test, y_train, y_test = train_test_split(
+        documents, dataset["classe"], test_size=0.2, random_state=42
+    )
+
     tfidf_vectorizer = TfidfVectorizer()
     X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
     X_test_tfidf = tfidf_vectorizer.transform(X_test)
 
-    # Crie e treine o modelo Random Forest
+    # # Calcule os valores de TF-IDF
+    # tfidf_values = X_train_tfidf.max(0).toarray()[0]
+
+    # # Use argsort para obter os índices das palavras em ordem decrescente de TF-IDF
+    # top_n = 300  # Escolha o número desejado de palavras com os maiores valores de TF-IDF
+    # top_indices = np.argsort(-tfidf_values)[:top_n]
+    # # Obtenha os nomes das palavras correspondentes
+    # feature_names = np.array(tfidf_vectorizer.get_feature_names_out())
+    # selected_feature_names = feature_names[top_indices]
+
+    # # Redefina o vetorizador TF-IDF para usar apenas as palavras selecionadas
+    # tfidf_vectorizer_selected = TfidfVectorizer(vocabulary=selected_feature_names)
+
+    # # Transforme os dados de treinamento e teste para usar apenas as palavras selecionadas
+    # X_train_tfidf_selected = tfidf_vectorizer_selected.fit_transform(X_train)
+    # X_test_tfidf_selected = tfidf_vectorizer_selected.transform(X_test)
+
     rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
     rf_model.fit(X_train_tfidf, y_train)
 
-    # Crie e treine o modelo SVM
-    svm_model = SVC(kernel='linear', C=1, random_state=42)
+    svm_model = SVC(kernel="linear", C=1, random_state=42)
     svm_model.fit(X_train_tfidf, y_train)
 
-    # Faça previsões com ambos os modelos
+
     rf_predictions = rf_model.predict(X_test_tfidf)
     svm_predictions = svm_model.predict(X_test_tfidf)
 
-    # Avalie o desempenho dos modelos
     rf_accuracy = accuracy_score(y_test, rf_predictions)
     svm_accuracy = accuracy_score(y_test, svm_predictions)
 
@@ -37,50 +52,14 @@ def run():
     print("Desempenho do Random Forest:")
     print(f"Acurácia: {rf_accuracy:.2f}")
     print(classification_report(y_test, rf_predictions))
+    confusion = confusion_matrix(y_test, rf_predictions)
+    print(confusion)
 
     print("\nDesempenho do SVM:")
     print(f"Acurácia: {svm_accuracy:.2f}")
     print(classification_report(y_test, svm_predictions))
-    # # Pré-processamento dos dados de texto usando TF-IDF
-    # tfidf_vectorizer = TfidfVectorizer()
-    # X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
-    # X_test_tfidf = tfidf_vectorizer.transform(X_test)
-
-    # # top_300_indices = np.argsort(result.max(axis=0).toarray()[0])[::-1][:4000]
-    # # filtered_tfidf = result[:, top_300_indices]
-
-    # rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
-    # rf_model.fit(X_train_tfidf, y_train)
-    # rf_predictions = rf_model.predict(X_test_tfidf)
-    # confusion = confusion_matrix(y_test, rf_predictions)
-    
-    # print("Random Forest")
-    # print("Matriz de Confusão:")
-    # print(confusion)
-    # print()
-
-    # rf_accuracy = accuracy_score(y_test, rf_predictions)
-    # print("Acurácia: ", rf_accuracy)
-    # print()
-    # print(classification_report(y_test, rf_predictions))
-
-    # svm_model = SVC(kernel='linear', C=1, random_state=42)
-    # svm_model.fit(X_train_tfidf, y_train)
-
-
-    # svm_predictions = svm_model.predict(X_train_tfidf)
-    # confusion = confusion_matrix(y_test, svm_predictions)
-    
-    # print("SVM")
-    # print("Matriz de Confusão:")
-    # print(confusion)
-    # print()
-
-    # svc_accuracy = accuracy_score(y_test, svm_predictions)
-    # print("Acurácia: ", svc_accuracy)
-
-    # print(classification_report(y_test, svm_predictions))
-
+    confusion = confusion_matrix(y_test, svm_predictions)
+    print(confusion)
 
 if __name__ == "__main__":
     run()
