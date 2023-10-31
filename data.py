@@ -1,6 +1,8 @@
 import pandas as pd
+import nltk
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
+from nltk.stem import SnowballStemmer
 
 def read_csv_file(file: str):
     """ Opens csv file in write mode and returns the dataset """
@@ -17,6 +19,7 @@ def remove_special_characteres(text: str):
 
 def remove_stop_words(text: str, stop_words):
     """ Remove stop words from the string """
+    stemmer = SnowballStemmer('portuguese')    
     doc = ""
     words = text.split(" ")
     for word in words:
@@ -43,14 +46,8 @@ def data_preprocessing(dataset, string_column: str):
     for document in documents:
         doc = remove_special_characteres(document.lower())
         doc = remove_stop_words(doc, stop_words)
-        
-        # stemming
-        filtered_tokens = document.split(" ")
-        # stemmer = PorterStemmer()
-        # stemmed_tokens = [stemmer.stem(word) for word in filtered_tokens]
-        # for token in stemmed_tokens:
-        #     doc = f"{doc} {token}"
+
         cleaned_documents.append(doc)
-        # tf-idf (codificação de rótulos de classe)
+
 
     return cleaned_documents

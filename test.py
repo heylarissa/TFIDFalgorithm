@@ -57,7 +57,6 @@ for word in vocab:
     i+=1
 
 print("Tamanho do vocabulário: " + str(len(vocab)))
-# print(words_frequency)
 file.close()
 
 # import required module
@@ -68,20 +67,18 @@ from nltk.tokenize import word_tokenize
 # Tokenização
 tokens = word_tokenize(text)
 
-
 filtered_tokens = [word for word in tokens if word.lower() not in stop_words]
 
 # Stemming
 stemmer = PorterStemmer()
 stemmed_tokens = [stemmer.stem(word) for word in filtered_tokens]
-
+print(stemmed_tokens)
 
 # create object
 tfidf = TfidfVectorizer()
 
 # get tf-df values
 result = tfidf.fit_transform(data)
-print(result)
 X_train, X_test, y_train, y_test = train_test_split(result, dados['classe'], test_size=0.3, random_state=42)
 
 

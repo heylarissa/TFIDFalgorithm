@@ -7,6 +7,7 @@ Google has been using TF-IDF (or TF  IDF, TF*IDF, TFIDF, TF.IDF) to rank your co
 
 So, it’s important to wrap your head around the TF-IDF algorithm and how it works.
 
+https://www.freecodecamp.org/portuguese/news/como-processar-dados-textuais-usando-o-tf-idf-em-python/
 https://www.geeksforgeeks.org/understanding-tf-idf-term-frequency-inverse-document-frequency/
 
 Passo 1: Coletar e preparar os dados  
